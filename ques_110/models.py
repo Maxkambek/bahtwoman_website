@@ -1,6 +1,8 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 
+from accounts.models import Account
+
 
 class Question(models.Model):
     name = RichTextField()
@@ -35,3 +37,11 @@ class QuestionSecondSide(models.Model):
     second_side_3 = models.TextField()
     variant_1 = models.TextField()
     variant_2 = models.TextField()
+
+
+class UserQuestions(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.name

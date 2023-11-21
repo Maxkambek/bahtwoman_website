@@ -1,4 +1,4 @@
-from .models import Question, Question2variant, QuestionPtichka, QuestionVariant, QuestionSecondSide
+from .models import Question, Question2variant, QuestionPtichka, QuestionVariant, QuestionSecondSide, UserQuestions
 from rest_framework import serializers
 
 
@@ -42,3 +42,10 @@ class QuestionSerializer2(serializers.ModelSerializer):
         model = Question
         fields = ['id', 'name', 'second_name', 'for_done_front', 'answer_variants', 'second_side_question',
                   'for_question_2']
+
+
+class UserQuestionsSerializer(serializers.ModelSerializer):
+    question = QuestionSerializer(many=True)
+
+    class Meta:
+        fields = ['id', 'question']

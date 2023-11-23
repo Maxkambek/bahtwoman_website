@@ -44,4 +44,4 @@ class UserQuestions(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user.name
+        return f'{self.id}'

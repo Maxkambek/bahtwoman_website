@@ -79,7 +79,8 @@ class CreateUserAPIView(generics.GenericAPIView):
         token = Token.objects.create(user=user)
         data = {
             'message': 'User verified',
-            'token': str(token.key)
+            'token': str(token.key),
+            'is_paid': user.is_paid
         }
         return Response(data, status=status.HTTP_201_CREATED)
 
@@ -92,19 +93,21 @@ class LoginAPI(generics.GenericAPIView):
         return LoginSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
         phone = request.data['phone']
         pas = request.data['password']
-        if not Account.objects.filter(phone=phone).first():
-            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        user = authenticate(phone=phone, password=pas)
+        true_phone = '+'
+        for i in str(phone):
+            if i.isalnum():
+                true_phone = true_phone + i
+        user = Account.objects.filter(phone=true_phone, password=pas).first()
         if not user:
-            return Response({'message': 'Password incorrect'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'message': 'Login yoki parol xatoro sal'}, status=status.HTTP_404_NOT_FOUND)
         token = Token.objects.get(user=user)
         data = dict()
         data['token'] = token.key
         data['success'] = True
+        data['is_paid'] = user.is_paid
+        data['is_completed'] = user.is_completed
         return Response(data, status=status.HTTP_200_OK)
 
 

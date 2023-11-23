@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Question, UserQuestions
 from .serializer import QuestionSerializer, QuestionSerializer2, UserQuestionsSerializer
-from rest_framework import generics
+from rest_framework import generics, permissions, authentication
 
 
 class QuestionListAPIView(generics.ListAPIView):
@@ -16,19 +16,25 @@ class QuestionListAPIView2(generics.RetrieveAPIView):
 
 
 class CheckTestAPIView(APIView):
-    def post(self, request):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
         user = self.request.user.id
-        data = self.request.data['results']
-        for i in data:
-            if i == 'true':
-                try:
-                    user_qs = UserQuestions.objects.create(
-                        user_id=user,
-                        question_id=int(i)
-                    )
-                    user_qs.save()
-                except:
-                    pass
+        print(user)
+        data = self.request.data['question_id']
+        data1 = self.request.data['yes_or_no']
+        answer = self.request.data['answer']
+        qs = UserQuestions.objects.filter(user_id=user, question_id=data).first()
+        if not qs and data1 == 'true':
+            new = UserQuestions.objects.create(
+                question_id=data,
+                user_id=user
+            )
+            new.save()
+        if data == 110:
+            user.is_completed = True
+            user.save()
         return Response('success', status=200)
 
 

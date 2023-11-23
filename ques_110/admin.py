@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Question, QuestionVariant, QuestionSecondSide, QuestionPtichka, Question2variant
+from .models import Question, QuestionVariant, QuestionSecondSide, QuestionPtichka, Question2variant, UserQuestions
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
+
+
+@admin.register(UserQuestions)
+class UserQuestionsAdmin(admin.ModelAdmin):
+    pass
 
 
 class Question2Admin(TranslationStackedInline):

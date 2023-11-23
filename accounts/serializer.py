@@ -51,5 +51,4 @@ class LoginSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['phone', 'name', 'last_name', 'given_name', 'date_birth', 'passport_num', 'passport_expire',
-                  'district', 'address']
+        fields = ['phone', 'name', 'is_paid']

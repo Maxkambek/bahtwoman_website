@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Account, Country, Region, District, VerifyPhone
+from modeltranslation.admin import TranslationAdmin
 
 
 @admin.register(Account)
@@ -8,17 +9,17 @@ class AccountAdmin(admin.ModelAdmin):
 
 
 @admin.register(Country)
-class CountryAdmin(admin.ModelAdmin):
+class CountryAdmin(TranslationAdmin):
     pass
 
 
 @admin.register(Region)
-class RegionAdmin(admin.ModelAdmin):
+class RegionAdmin(TranslationAdmin):
     pass
 
 
 @admin.register(District)
-class DistrictAdmin(admin.ModelAdmin):
+class DistrictAdmin(TranslationAdmin):
     pass
 
 
